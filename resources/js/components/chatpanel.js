@@ -129,7 +129,7 @@ class Chatpanel extends React.Component {
         let a_tok = document.querySelector('meta[name="csrf-token"]').content;
         //suscribing to pusher channel
         Pusher.logToConsole = true;
-        var pusher = new Pusher('649f5ddeef4b7a77a1f3', {
+        var pusher = new Pusher('99cc3e12f7edd9d3c55f', {
             cluster: 'ap2',
             authEndpoint:'/broadcasting/auth',
             auth:{
