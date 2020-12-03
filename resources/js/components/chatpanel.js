@@ -33,7 +33,7 @@ class Chatpanel extends React.Component {
 
     loadUsers(){
         let tok = document.querySelector('meta[name="csrf-token"]').content;
-        fetch('http://127.0.0.1:8000/fetchUsers',{
+        fetch('http://127.0.0.1:8000/api/fetchUsers',{
             method:'POST',
             headers:{
                 'Content-Type':'application/json',
@@ -67,7 +67,7 @@ class Chatpanel extends React.Component {
         }
         let tok = document.querySelector('meta[name="csrf-token"]').content;
         // alert(el_id.target.id);
-        fetch('http://127.0.0.1:8000/fetchmessages?rec_id='+clicked_user_id,{
+        fetch('http://127.0.0.1:8000/api/fetchmessages?rec_id='+clicked_user_id,{
             method:'POST',
             headers:{
                 'Content-Type':'application/json',
@@ -121,7 +121,7 @@ class Chatpanel extends React.Component {
         
         let data = new FormData();
         data.append('message','msg');
-        fetch('http://127.0.0.1:8000/messages?message='+msg+'&rec_id='+activeUserId,{
+        fetch('http://127.0.0.1:8000/api/messages?message='+msg+'&rec_id='+activeUserId,{
             method:'POST',
             headers:{
                 'Content-Type':'application/json',
