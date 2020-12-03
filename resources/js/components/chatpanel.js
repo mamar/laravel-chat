@@ -22,6 +22,14 @@ class Chatpanel extends React.Component {
         this.loadUsers();
         //this.subscribeToPusher();    
     }
+    getActiveUser(){
+        if(this.state.active_user.length == 0){
+            return;
+        }
+        else{
+            return this.state.active_user[0];
+        }
+    }
 
     loadUsers(){
         let tok = document.querySelector('meta[name="csrf-token"]').content;
@@ -47,7 +55,8 @@ class Chatpanel extends React.Component {
     }
 
     loadChats(el_id){
-        let clicked_user_id = el_id.target.id;
+        let clicked_user_id = Number (el_id.target.id);
+                console.log('asdfg',clicked_user_id);
         
         for(var eu=0;eu<this.state.user_list.length;eu++){
             if(this.state.user_list[eu].id == clicked_user_id){
@@ -90,7 +99,7 @@ class Chatpanel extends React.Component {
 
     renderList(dataToRender){
         let list = document.getElementById('chat_list');
-        let list_item = document.createElement('li');
+        let list_item = document.createElement('li'.val);
         list_item.innerHTML = dataToRender;
         list.appendChild(list_item);
     }
@@ -99,11 +108,20 @@ class Chatpanel extends React.Component {
         let msg = document.getElementById('chat_tbox').value;
         
         let tok = document.querySelector('meta[name="csrf-token"]').content;
+        let activeUserId = this.state.active_user[0].id;
+        let clicked_user_id = e.target.id;
         
+        for(var eu=0;eu<this.state.user_list.length;eu++){
+            if(this.state.user_list[eu].id == clicked_user_id){
+                this.setState({active_user:this.state.active_user.splice(0,this.state.active_user.length)});
+                this.setState({active_user:this.state.active_user.concat(this.state.user_list[eu])});
+                break;
+            }
+        }
         
         let data = new FormData();
         data.append('message','msg');
-        fetch('http://127.0.0.1:8000/messages?message='+msg+'&rec_id=2',{
+        fetch('http://127.0.0.1:8000/messages?message='+msg+'&rec_id='+activeUserId,{
             method:'POST',
             headers:{
                 'Content-Type':'application/json',
@@ -129,8 +147,8 @@ class Chatpanel extends React.Component {
         let a_tok = document.querySelector('meta[name="csrf-token"]').content;
         //suscribing to pusher channel
         Pusher.logToConsole = true;
-        var pusher = new Pusher('99cc3e12f7edd9d3c55f', {
-            cluster: 'ap2',
+        var pusher = new Pusher('86fa8a8b897d23aae21b', {
+            cluster: 'eu',
             authEndpoint:'/broadcasting/auth',
             auth:{
                 headers:{
@@ -139,8 +157,8 @@ class Chatpanel extends React.Component {
             }
         });
         var new_msg = [];
-        var channel = pusher.subscribe('private-chat-'+user.id);
-        channel.bind('App\\Events\\MessageEvent', function(d) {
+        var channel = pusher.subscribe('private-spark1-'+user.id);
+        channel.bind('message.chats', function(d) {
             console.log("you have a new message:"+JSON.stringify(d));
             alert(d.msg);
             //new_msg.push(d.message.message);
@@ -180,7 +198,7 @@ class Chatpanel extends React.Component {
                             </div>
                             <div className="card-footer">
                                 <input type="text" id="chat_tbox" className="form-control" placeholder="Enter message..." />
-                                <input type="submit" className="btn btn-primary btn-sm" value="GO" onClick={this.handleEve} />
+                                <input type="submit" className="btn btn-primary btn-sm" value="send" onClick={this.handleEve} />
                             </div>
                         </div>
                     </div>

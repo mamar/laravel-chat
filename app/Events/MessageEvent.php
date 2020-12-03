@@ -44,6 +44,9 @@ class MessageEvent implements ShouldBroadcast
             new PrivateChannel('spark1'.$this->rec_id)
         ];
     }
-
+    public function broadcastAs()
+    {
+        return 'message.chats';
+    }
     
 }
