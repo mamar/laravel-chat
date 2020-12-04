@@ -121,7 +121,7 @@ class Chatpanel extends React.Component {
         
         let data = new FormData();
         data.append('message','msg');
-        fetch('http://127.0.0.1:8000/api/messages?message='+msg+'&rec_id='+activeUserId,{
+        fetch('http://127.0.0.1:8000/api/messages?message='+msg+'&receiver_id='+activeUserId,{
             method:'POST',
             headers:{
                 'Content-Type':'application/json',
